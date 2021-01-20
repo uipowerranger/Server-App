@@ -22,12 +22,15 @@ router.post(
 );
 router.post("/category/getAllCategory", adminController.getAllCategory);
 
-router.post("/category/updateSubCategory", adminController.updateSubCategory);
+router.post(
+  "/subcategory/updateSubCategory",
+  adminController.updateSubCategory
+);
 router.post("/category/updateCategory", adminController.updateCategory);
 
 router.post("/category/deleteCategory", adminController.deleteCategory);
 router.post(
-  "/SubCategory/deleteSubCategory",
+  "/subcategory/deleteSubCategory",
   adminController.deleteSubCategory
 );
 

@@ -18,7 +18,7 @@ exports.register = async (req) => {
     params.last_name = request.last_name;
     params.password = request.password;
     params.phone_number = request.phone_number;
-    params.image = '';
+    params.image = "";
     params.email_id = request.email_id;
     params.is_active = 1;
     params.created_at = utilsinfo.getCurrentUTCTimestamp();
@@ -32,9 +32,11 @@ exports.register = async (req) => {
 
 //Admin Login
 exports.login = async (req) => {
-  const {username, password} = req.body;
-  let admin = await adminSchema
-    .find({ email_id: username, password: password });
+  const { username, password } = req.body;
+  let admin = await adminSchema.find({
+    email_id: username,
+    password: password,
+  });
   if (admin.length > 0) {
     return [false, admin];
   } else {
@@ -45,9 +47,13 @@ exports.login = async (req) => {
 //create category
 exports.createCategory = async (req) => {
   const request = req.body;
-  console.log(request)
+  console.log(request);
   let params = {};
-  if (request.category_name && request.is_active && request.category_name != "") {
+  if (
+    request.category_name &&
+    request.is_active &&
+    request.category_name != ""
+  ) {
     params.category_name = request.category_name;
     params.is_active = request.is_active;
     params.created_at = utilsinfo.getCurrentUTCTimestamp();
@@ -77,28 +83,25 @@ exports.getAllSubCategory = async (req) => {
       },
     },
   ]);
-  let category = await categorySchema.find();
-  let data = {};
-  data['sub_category_list'] = subCategory;
-  data['category_list'] = category;
-  return [false, data];
+  return [false, subCategory];
 };
 
 // get all categories
 exports.updateCategory = async (req) => {
-  const {_id, ...rest} = req.body;
+  const { _id, ...rest } = req.body;
   let category = await categorySchema.updateOne(
-    {_id: _id},
-    {$set: {...rest}}
+    { _id: _id },
+    { $set: { ...rest } }
   );
   return [false, category];
 };
 
 // get all updateSubCategories
 exports.updateSubCategory = async (req) => {
+  const { _id, ...rest } = req.body;
   let subCategory = await subCategorySchema.updateOne(
-    { _id: request.body },
-    { $set: { ...req.body } }
+    { _id: _id },
+    { $set: { ...rest } }
   );
   return [false, subCategory];
 };
