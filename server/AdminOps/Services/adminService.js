@@ -140,24 +140,20 @@ exports.createSubCategory = async (req) => {
 
 //create Product
 exports.createProduct = async (req) => {
-  const request = req.body;
+  const { _id, ...request } = req.body;
   let params = {};
-  if (request.is_new_category === 1) {
-    let [err, newCategory] = await this.createCategory(req);
-    if (err) {
-      return [true, []];
-    }
-    req.body.category_id = newCategory._id;
-    let [errSub, newSubCategory] = await this.createSubCategory(req);
-    request.category_id = newCategory._id;
-    request.sub_category_id = newSubCategory._id;
-  }
-
-  if (request.category_id && request.sub_category_id) {
+  // if (request.is_new_category === 1) {
+  //   let [err, newCategory] = await this.createCategory(req);
+  //   if (err) {
+  //     return [true, []];
+  //   }
+  //   req.body.category_id = newCategory._id;
+  //   let [errSub, newSubCategory] = await this.createSubCategory(req);
+  //   request.category_id = newCategory._id;
+  //   request.sub_category_id = newSubCategory._id;
+  // }
+  if (request.category_details && request.sub_category_details) {
     params = { ...request };
-    params.category_details = request.category_id;
-    params.sub_category_details = request.sub_category_id;
-    params.is_active = 1;
     params.created_at = utilsinfo.getCurrentUTCTimestamp();
     params.offer_from_date = utilsinfo.getTimestamp(req.body.offer_from_date);
     params.offer_to_date = utilsinfo.getTimestamp(req.body.offer_to_date);
@@ -171,37 +167,60 @@ exports.createProduct = async (req) => {
 
 //update product
 exports.updateProduct = async (req) => {
-  const request = req.body;
+  const { _id, ...request } = req.body;
   let params = { ...request };
-  if (!req.body.is_active) {
-    params.offer_from_date = utilsinfo.getTimestamp(req.body.offer_from_date);
-    params.offer_to_date = utilsinfo.getTimestamp(req.body.offer_to_date);
+  if (params.created_at) {
+    params.offer_from_date = utilsinfo.getTimestamp(params.offer_from_date);
+    params.offer_to_date = utilsinfo.getTimestamp(params.offer_to_date);
+    params.created_at = utilsinfo.getTimestamp(params.created_at);
   }
-  let result = await productsSchema.updateOne(
-    { _id: request._id },
-    { $set: params }
-  );
-  return [false, !req.body.is_active ? result : []];
+  let result = await productsSchema.updateOne({ _id: _id }, { $set: params });
+  return [false, result];
 };
 
 //get metadata create product
 exports.getMetaDataCreateProduct = async (req) => {
-  let categories = await categorySchema.aggregate([
+  let products = await productsSchema.aggregate([
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category_details",
+        foreignField: "_id",
+        as: "category_detail",
+      },
+    },
     {
       $lookup: {
         from: "sub_categories",
-        localField: "_id",
-        foreignField: "category_details",
-        as: "sub_category_details",
+        localField: "sub_category_details",
+        foreignField: "_id",
+        as: "sub_category_detail",
       },
     },
   ]);
-  return [false, categories];
+  return [false, products];
 };
 
 //get all products
 exports.getAllProducts = async (req) => {
-  let products = await productsSchema.find();
+  let products = await productsSchema.aggregate([
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category_details",
+        foreignField: "_id",
+        as: "category_detail",
+      },
+    },
+    {
+      $lookup: {
+        from: "sub_categories",
+        localField: "sub_category_details",
+        foreignField: "_id",
+        as: "sub_category_detail",
+      },
+    },
+  ]);
   return [false, products];
 };
 
