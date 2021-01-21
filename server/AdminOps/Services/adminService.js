@@ -21,7 +21,6 @@ exports.getLoginUser = async (req) => {
 };
 
 exports.updateAdmin = async (req) => {
-  console.log(req.body, "req");
   const { _id, ...rest } = req.body;
   let admin = await adminSchema.updateOne({ _id: _id }, { $set: { ...rest } });
   return [false, admin];
@@ -65,7 +64,6 @@ exports.login = async (req) => {
 //create category
 exports.createCategory = async (req) => {
   const request = req.body;
-  console.log(request);
   let params = {};
   if (
     request.category_name &&
