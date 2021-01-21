@@ -6,7 +6,6 @@ var moment = require("moment");
 var base64ToImage = require("base64-to-image");
 const ip = require("ip");
 let ipAddress = ip.address();
-// ipAddress = ipAddress.replace(/\./g, "_");
 
 exports.getCurrentUTCTime = function () {
   var now = moment().utc().format("YYYY-MM-DD HH:mm:ss");
@@ -613,7 +612,7 @@ exports.getCurrentISTDDMMYY = function () {
 
 exports.saveImage = async (base64) => {
   var timeInMss = new Date().getTime();
-  var baseUrl = `http://172.16.224.204:4500`;
+  var baseUrl = `http://${ipAddress}:${process.env.PORT}`;
   var base64Str = base64;
   var path = "./uploads/";
   var optionalObj = { fileName: timeInMss, type: "png" };

@@ -43,4 +43,6 @@ router.post(
 // done today
 router.post("/product/filterProductBy", adminController.filterProductby);
 
+router.post("/fileUpload", adminController.fileUpload);
+
 module.exports = router;

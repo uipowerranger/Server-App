@@ -1,5 +1,13 @@
 const adminService = require("../Services/adminService");
 const responseWrapper = require("../../utils/responseWrapper");
+const utils = require("../../utils/util");
+
+//File Upload
+exports.fileUpload = async (req, res) => {
+  const data = req.body.data;
+  let url = await utils.saveImage(data);
+  res.send({ url });
+};
 
 //Register
 exports.register = async (req, res) => {
