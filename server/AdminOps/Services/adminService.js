@@ -9,6 +9,24 @@ var ObjectId = require("mongodb").ObjectId;
 // const fromUser = "+16179335050";
 // const client = require("twilio")(accountSid, authToken);
 
+//getLoginUser
+exports.getLoginUser = async (req) => {
+  const { _id } = req.body;
+  let admin = await adminSchema.find({ _id: _id });
+  if (admin.length > 0) {
+    return [false, admin];
+  } else {
+    return [true, []];
+  }
+};
+
+exports.updateAdmin = async (req) => {
+  console.log(req.body, "req");
+  const { _id, ...rest } = req.body;
+  let admin = await adminSchema.updateOne({ _id: _id }, { $set: { ...rest } });
+  return [false, admin];
+};
+
 //Admin Register
 exports.register = async (req) => {
   const request = req.body;

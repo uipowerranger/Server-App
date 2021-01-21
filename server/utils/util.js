@@ -613,7 +613,7 @@ exports.getCurrentISTDDMMYY = function () {
 
 exports.saveImage = async (base64) => {
   var timeInMss = new Date().getTime();
-  var baseUrl = `http://3.137.139.78:4949`;
+  var baseUrl = `http://172.16.224.204:4500`;
   var base64Str = base64;
   var path = "./uploads/";
   var optionalObj = { fileName: timeInMss, type: "png" };

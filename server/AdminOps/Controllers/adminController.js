@@ -15,6 +15,33 @@ exports.register = async (req, res) => {
   responseWrapper.successWrapper(res, 200, data, "Successfully added admin");
 };
 
+//getLoginUser
+exports.getLoginUser = async (req, res) => {
+  const [err, data, message] = await adminService.getLoginUser(req);
+  if (err) {
+    responseWrapper.errorWrapper(
+      res,
+      -9999,
+      "Something Went Wrong While Login"
+    );
+    return;
+  }
+  responseWrapper.successWrapper(res, 200, data, "Successfully got user");
+};
+
+exports.updateAdmin = async (req, res) => {
+  const [err, data, message] = await adminService.updateAdmin(req);
+  if (err) {
+    responseWrapper.errorWrapper(
+      res,
+      -9999,
+      "Something Went Wrong While Login"
+    );
+    return;
+  }
+  responseWrapper.successWrapper(res, 200, data, "Successfully Updated");
+};
+
 //Login
 exports.login = async (req, res) => {
   const [err, data, message] = await adminService.login(req);

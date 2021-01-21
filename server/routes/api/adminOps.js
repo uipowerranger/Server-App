@@ -5,6 +5,8 @@ const adminController = require("../../AdminOps/Controllers/adminController");
 
 router.post("/register", adminController.register);
 router.post("/login", adminController.login);
+router.post("/getLoginUser", adminController.getLoginUser);
+router.post("/updateAdmin", adminController.updateAdmin);
 router.get("/product/metadata", adminController.getProductMetaData);
 router.post("/product/add", adminController.createProduct);
 router.get("/product", adminController.getAllProducts);

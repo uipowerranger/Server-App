@@ -3,7 +3,7 @@ const express = require("express");
 require("dotenv").config({ path: "./server/config/config.env" });
 const passport = require("passport");
 const session = require("express-session");
-var cors = require('cors')
+var cors = require("cors");
 const bodyParser = require("body-parser");
 const MongoStore = require("connect-mongo")(session);
 const connectDB = require("./server/config/db");
@@ -11,7 +11,6 @@ const morgon = require("morgan");
 const cronJobs = require("./server/config/cronJobs");
 const socket = require("./server/config/socketIO");
 const http = require("http");
-
 const app = express();
 
 //body parser intialisation
@@ -21,7 +20,7 @@ app.use(
   })
 );
 
-app.use(cors())
+app.use(cors());
 
 //add file upload directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -41,7 +40,7 @@ cronJobs.start();
 
 //Start server
 const port = process.env.PORT || 4500;
-const server=app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
