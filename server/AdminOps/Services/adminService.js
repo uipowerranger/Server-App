@@ -3,7 +3,7 @@ var utilsinfo = require("../../utils/util");
 const categorySchema = require("../Models/productCategory");
 const subCategorySchema = require("../Models/productSubCategory");
 const productsSchema = require("../Models/product");
-var ObjectID = require("mongodb").ObjectID;
+var ObjectId = require("mongodb").ObjectId;
 // const accountSid = "ACe3d060b1cb0951516df92cf5eb7a3678";
 // const authToken = "62f14ae03894cd6sede5cecf13f67f93";
 // const fromUser = "+16179335050";
@@ -80,6 +80,28 @@ exports.getAllSubCategory = async (req) => {
         localField: "category_details",
         foreignField: "_id",
         as: "category",
+      },
+    },
+  ]);
+  return [false, subCategory];
+};
+
+// get all subCategories
+exports.getAllSubCategorybyCategory = async (req) => {
+  let subCategory = await subCategorySchema.aggregate([
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category_details",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $match: {
+        category_details: !!req.body.category
+          ? ObjectId(req.body.category)
+          : "",
       },
     },
   ]);

@@ -78,6 +78,26 @@ exports.getAllSubCategory = async (req, res) => {
   );
 };
 
+exports.getAllSubCategorybyCategory = async (req, res) => {
+  const [err, data, message] = await adminService.getAllSubCategorybyCategory(
+    req
+  );
+  if (err) {
+    responseWrapper.errorWrapper(
+      res,
+      -9999,
+      "Something Went Wrong While getting subcategory"
+    );
+    return;
+  }
+  responseWrapper.successWrapper(
+    res,
+    200,
+    data,
+    "Successfully got subcategory"
+  );
+};
+
 exports.createSubCategory = async (req, res) => {
   const [err, data, message] = await adminService.createSubCategory(req);
   if (err) {

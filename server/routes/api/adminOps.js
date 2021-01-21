@@ -20,6 +20,10 @@ router.post(
   "/subcategory/getAllSubCategory",
   adminController.getAllSubCategory
 );
+router.post(
+  "/subcategory/getAllSubCategorybyCategory",
+  adminController.getAllSubCategorybyCategory
+);
 router.post("/category/getAllCategory", adminController.getAllCategory);
 
 router.post(
