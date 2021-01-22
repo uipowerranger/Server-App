@@ -9,6 +9,20 @@ exports.fileUpload = async (req, res) => {
   res.send({ url });
 };
 
+//Verify OTP
+exports.verifyOtp = async (req, res) => {
+  const [err, data, message] = await adminService.verifyOtp(req);
+  if (err) {
+    responseWrapper.errorWrapper(
+      res,
+      -9999,
+      "Something Went Wrong While Register"
+    );
+    return;
+  }
+  responseWrapper.successWrapper(res, 200, data, "OTP Verified");
+};
+
 //Register
 exports.register = async (req, res) => {
   const [err, data, message] = await adminService.register(req);

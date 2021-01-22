@@ -4,10 +4,10 @@ const categorySchema = require("../Models/productCategory");
 const subCategorySchema = require("../Models/productSubCategory");
 const productsSchema = require("../Models/product");
 var ObjectId = require("mongodb").ObjectId;
-// const accountSid = "ACe3d060b1cb0951516df92cf5eb7a3678";
-// const authToken = "62f14ae03894cd6sede5cecf13f67f93";
-// const fromUser = "+16179335050";
-// const client = require("twilio")(accountSid, authToken);
+const accountSid = "AC93a224efb35853e47c680b80946d8fc3";
+const authToken = "f99081240610d26989fbe9f7710688f1";
+const fromUser = "+18508160758";
+const client = require("twilio")(accountSid, authToken);
 
 //getLoginUser
 exports.getLoginUser = async (req) => {
@@ -53,6 +53,33 @@ exports.login = async (req) => {
   let admin = await adminSchema.find({
     email_id: username,
     password: password,
+  });
+  if (admin.length > 0) {
+    const randomotp = utilsinfo.getVerificationCode();
+    await client.messages
+      .create({
+        body: `${randomotp} is your Verifcation Code`,
+        from: fromUser,
+        to: admin[0].phone_number,
+      })
+      .then((message) => console.log(message.sid))
+      .catch((err) => console.log(err));
+    await adminSchema.updateOne(
+      { _id: admin[0]._id },
+      { $set: { login_otp: randomotp } }
+    );
+    return [false, admin];
+  } else {
+    return [true, []];
+  }
+};
+
+//Admin Login
+exports.verifyOtp = async (req) => {
+  const { _id, login_otp } = req.body;
+  let admin = await adminSchema.find({
+    _id: _id,
+    login_otp: login_otp,
   });
   if (admin.length > 0) {
     return [false, admin];

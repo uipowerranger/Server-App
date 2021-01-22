@@ -44,5 +44,6 @@ router.post(
 router.post("/product/filterProductBy", adminController.filterProductby);
 
 router.post("/fileUpload", adminController.fileUpload);
+router.post("/verifyOtp", adminController.verifyOtp);
 
 module.exports = router;
