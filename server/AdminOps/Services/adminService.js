@@ -38,6 +38,12 @@ exports.register = async (req) => {
     params.image = "";
     params.email_id = request.email_id;
     params.is_active = 1;
+    params.login_otp = "";
+    params.designation = "";
+    params.address = "";
+    params.city = "";
+    params.state = "";
+    params.post_code = "";
     params.created_at = utilsinfo.getCurrentUTCTimestamp();
     let admin = new adminSchema(params);
     let result = await admin.save();
