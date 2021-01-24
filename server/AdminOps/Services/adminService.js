@@ -4,9 +4,9 @@ const categorySchema = require("../Models/productCategory");
 const subCategorySchema = require("../Models/productSubCategory");
 const productsSchema = require("../Models/product");
 var ObjectId = require("mongodb").ObjectId;
-const accountSid = "AC93a224efb35853e47c680b80946d8fc3";
-const authToken = "f99081240610d26989fbe9f7710688f1";
-const fromUser = "+18508160758";
+const accountSid = "AC5a86fd24f76209595d3eb4d5ba0a7854";
+const authToken = "b77bd496b51f385a255fac9586e7dbc2";
+const fromUser = "+18124153607";
 const client = require("twilio")(accountSid, authToken);
 
 //getLoginUser
