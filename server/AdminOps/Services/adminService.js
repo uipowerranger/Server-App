@@ -4,9 +4,9 @@ const categorySchema = require("../Models/productCategory");
 const subCategorySchema = require("../Models/productSubCategory");
 const productsSchema = require("../Models/product");
 var ObjectId = require("mongodb").ObjectId;
-const accountSid = "AC5a86fd24f76209595d3eb4d5ba0a7854";
-const authToken = "b77bd496b51f385a255fac9586e7dbc2";
-const fromUser = "+18124153607";
+const accountSid = "AC4be7b5b92540e1b4106f98110175a683";
+const authToken = "518a15d6007c1f542dc43d1ec45c56ac";
+const fromUser = "+17330843533";
 const client = require("twilio")(accountSid, authToken);
 
 //getLoginUser
@@ -31,23 +31,27 @@ exports.register = async (req) => {
   const request = req.body;
   let params = {};
   if (request.email_id && request.password) {
-    params.first_name = request.first_name;
-    params.last_name = request.last_name;
-    params.password = request.password;
-    params.phone_number = request.phone_number;
-    params.image = "";
-    params.email_id = request.email_id;
-    params.is_active = 1;
-    params.login_otp = "";
-    params.designation = "";
-    params.address = "";
-    params.city = "";
-    params.state = "";
-    params.post_code = "";
-    params.created_at = utilsinfo.getCurrentUTCTimestamp();
-    let admin = new adminSchema(params);
-    let result = await admin.save();
-    return [false, result];
+    try {
+      params.first_name = request.first_name;
+      params.last_name = request.last_name;
+      params.password = request.password;
+      params.phone_number = request.phone_number;
+      params.image = "";
+      params.email_id = request.email_id;
+      params.is_active = 1;
+      params.login_otp = "";
+      params.designation = "";
+      params.address = "";
+      params.city = "";
+      params.state = "";
+      params.post_code = "";
+      params.created_at = utilsinfo.getCurrentUTCTimestamp();
+      let admin = new adminSchema(params);
+      let result = await admin.save();
+      return [false, result];
+    } catch (e) {
+      return [true, [], "Duplicate email id or phone number"];
+    }
   } else {
     return [true, []];
   }
@@ -62,21 +66,22 @@ exports.login = async (req) => {
   });
   if (admin.length > 0) {
     const randomotp = utilsinfo.getVerificationCode();
-    await client.messages
-      .create({
+    try {
+      await client.messages.create({
         body: `${randomotp} is your Verifcation Code`,
         from: fromUser,
         to: admin[0].phone_number,
-      })
-      .then((message) => console.log(message.sid))
-      .catch((err) => console.log(err));
-    await adminSchema.updateOne(
-      { _id: admin[0]._id },
-      { $set: { login_otp: randomotp } }
-    );
-    return [false, admin];
+      });
+      await adminSchema.updateOne(
+        { _id: admin[0]._id },
+        { $set: { login_otp: randomotp } }
+      );
+      return [false, admin];
+    } catch (e) {
+      return [true, [], "Unable to sent OTP to phone number"];
+    }
   } else {
-    return [true, []];
+    return [true, [], "Invalid Login"];
   }
 };
 

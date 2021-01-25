@@ -27,11 +27,7 @@ exports.verifyOtp = async (req, res) => {
 exports.register = async (req, res) => {
   const [err, data, message] = await adminService.register(req);
   if (err) {
-    responseWrapper.errorWrapper(
-      res,
-      -9999,
-      "Something Went Wrong While Register"
-    );
+    responseWrapper.errorWrapper(res, -9999, message);
     return;
   }
   responseWrapper.successWrapper(res, 200, data, "Successfully added admin");
@@ -68,11 +64,7 @@ exports.updateAdmin = async (req, res) => {
 exports.login = async (req, res) => {
   const [err, data, message] = await adminService.login(req);
   if (err) {
-    responseWrapper.errorWrapper(
-      res,
-      -9999,
-      "Something Went Wrong While Login"
-    );
+    responseWrapper.errorWrapper(res, -9999, message);
     return;
   }
   responseWrapper.successWrapper(res, 200, data, "Successfully Logged In");
